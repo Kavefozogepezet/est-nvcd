@@ -1,0 +1,31 @@
+
+# def of supercell
+acell 3*6.7512684989
+rprim
+    1 0 0
+    0 1 0
+    0 0 1
+
+# info on possible atoms
+ntypat  2
+znucl   6 7
+pp_dirpath  "$ABI_PPDIR"
+pseudos     "C.psp8, N.psp8"
+
+# atoms and positions
+natom 8
+typat 8*1
+xcart
+    0.0 0.0 0.0
+    1.6878171247 1.6878171247 1.6878171247
+    3.37563424945 3.37563424945 0.0
+    5.0634513741500005 5.0634513741500005 1.6878171247
+    0.0 3.37563424945 3.37563424945
+    1.6878171247 5.0634513741500005 5.0634513741500005
+    3.37563424945 0.0 3.37563424945
+    5.0634513741500005 1.6878171247 5.0634513741500005
+
+# output directories
+outdata_prefix  "./abinit-out/"
+tmpdata_prefix  "./abinit-tmp/"
+

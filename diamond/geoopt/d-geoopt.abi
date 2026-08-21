@@ -1,0 +1,44 @@
+
+# converged ecut and k grid
+ecut    46
+kptopt  1
+ngkpt   8       8       8
+shiftk  0       0       0
+
+# def of primitive cell
+acell   3*6.74
+rprim   1/2     1/2     0
+        0       1/2     1/2
+        1/2     0       1/2
+
+# geopetry optimisation
+optcell 1
+geoopt "bfgs"
+ntime 30
+dilatmx 1.05
+
+# info on possible atoms
+ntypat  1
+znucl   6
+pp_dirpath  "$ABI_PPDIR"
+pseudos     "C.psp8"
+
+# atoms and positions
+natom   2
+typat   1   1
+xred    0       0       0
+        1/4     1/4     1/4
+
+# settings, hints
+chksymbreak     0
+nstep   30
+toldff  5.0d-4
+diemac  5.7
+getwfk  -1
+iomode  3
+prtwf   1
+istwfk  *1
+
+# output directories
+outdata_prefix  "./abinit-out/"
+tmpdata_prefix  "./abinit-tmp/"
