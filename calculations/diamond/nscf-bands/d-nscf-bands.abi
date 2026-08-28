@@ -1,0 +1,42 @@
+# converged ecut and k grid
+ecut    46
+kptopt  1
+ngkpt   3*10
+shiftk  3*0
+
+# def of primitive cell
+acell   3*6.7512815770
+rprim   1/2     1/2     0
+        0       1/2     1/2
+        1/2     0       1/2
+
+# info on possible atoms
+ntypat  1
+znucl   6
+pp_dirpath  "$ABI_PPDIR"
+pseudos     "C.psp8"
+
+# atoms and positions
+natom   2
+typat   1   1
+xred    0       0       0
+        1/4     1/4     1/4
+
+# bands
+iscf    -2
+nband   220
+nbdbuf  20
+tolwfr  1.0d-12
+
+# settings, hints
+getden_filepath "../scf-gs/abinit-out/_DEN.nc"
+chksymbreak     0
+nstep   30
+diemac  5.7
+iomode  3
+prtwf   1
+istwfk  *1
+
+# output directories
+outdata_prefix  "./abinit-out/"
+tmpdata_prefix  "./abinit-tmp/"

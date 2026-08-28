@@ -1,0 +1,57 @@
+ndtset  10
+udtset  5 2
+
+# converged ecut and k grid
+ecut    46
+kptopt  1
+ngkpt   3*10
+shiftk  3*0
+
+# def of primitive cell
+acell   3*6.7512815770
+rprim   1/2     1/2     0
+        0       1/2     1/2
+        1/2     0       1/2
+
+# info on possible atoms
+ntypat  1
+znucl   6
+pp_dirpath  "$ABI_PPDIR"
+pseudos     "C.psp8"
+
+# atoms and positions
+natom   2
+typat   1   1
+xred    0       0       0
+        1/4     1/4     1/4
+
+# screening
+optdriver?1         3
+nband?1             100
+ecuteps11           4
+ecuteps21           8
+ecuteps31           12
+ecuteps41           16
+ecuteps51           20
+
+# self-energy
+optdriver?2 4
+getscr?2    -1
+nband?2     100
+ecutsigx?2  20
+nkptgw?2    1
+kptgw?2     0       0       0
+bdgw?2      4 5
+
+# settings, hints
+getwfk_filepath "../nscf-bands/abinit-out/_WFK.nc"
+chksymbreak     0
+nstep   30
+diemac  5.7
+iomode  3
+prtwf   1
+istwfk  *1
+
+# output directories
+outdata_prefix  "./abinit-out/"
+tmpdata_prefix  "./abinit-tmp/"
