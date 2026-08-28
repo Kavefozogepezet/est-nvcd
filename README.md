@@ -29,25 +29,25 @@ Bálint Apostagi, SoSe 2026
 ### ROADMAP
 
 - simulation of a primitive cell of diamond
-  - basic convergence tests: ✅
+  - basic convergence tests:
     - energy cutoff ✅
     - k point grid ✅
   - geometry optimization ✅
   - convergence tests for GW:
     - epsilon^-1
-      - number of bands
-      - energy cutoff
+      - number of bands ✅
+      - energy cutoff ✅
     - self-energy
-      - number of bands
-      - energy cutoff
+      - number of bands ✅
+      - energy cutoff ✅
   - band structure:
-    - KS band structure
-    - GW correction
+    - KS band structure ✅
+    - GW correction ✅
 - cubic cell of diamond
-  - ground state
-  - KS band structure 
-- NV-center in a cubic cell of diamond
-- NV center in 2x2x2 supercell
+  - ground state ✅
+  - KS band structure ✅
+- NV-center in a cubic cell of diamond ✅
+- NV center in 2x2x2 supercell ✅
 
 ---------------------------------------------------------
 
