@@ -11,16 +11,16 @@ Bálint Apostagi, SoSe 2026
 - **calculations**: all abinit stuff here
   - **diamond**: primitive cell of diamond
     - **ecut**, **ngkpt**: convergence for the respective variables
-    - **geoopt**: geometry optimization
+    - **geoopt**: geometry optimization of the primitive cell
     - **scf-gs**: scf ground state calculation with all converged parameters 
-    - **atomization**: reference energy for a carbon atom, atomization energy
+    - **atomization**: reference energy for a carbon atom
     - **nscf-bands**: nscf calculation with many empty bands for screening
-    - **bandstrc**: nscf calculation along a high-symmetry k-path
-    - **scr\***: convergence for screening parameters, and the screening calculation itself
-    - **gw\***: convergence for self-energy, and the self-energy calculation itself, application to the band structure
+    - **bands**: nscf calculation along a high-symmetry k-path for the band structure plots
+    - **scr\***: convergences for screening parameters, and the screening calculation itself
+    - **gw\***: convergences for self-energy parameters, and the self-energy calculation itself
   - **diamond1**: cubic cell of diamond
   - **nvc\<i\>**: NV-center in an i^3 supercell
-- **plotters**: scripts which plot the results from the calculations
+- **plotters**: scripts for plotting calculation results
 - **docs**
   - **figures**: exported plots
 
