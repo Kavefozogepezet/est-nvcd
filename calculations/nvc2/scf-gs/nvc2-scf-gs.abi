@@ -12,6 +12,10 @@ znucl   6 7
 pp_dirpath  "$ABI_PPDIR"
 pseudos     "C.psp8, N.psp8" 
 
+# spin polarization
+nsppol 2
+spinmagntarget 2
+
 # def of supercell
 acell 3*13.502563154
 cellcharge -1
