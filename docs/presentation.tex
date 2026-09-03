@@ -1,0 +1,296 @@
+\documentclass[fontsize=9pt]{beamer}
+
+\usepackage[backend=biber,style=authortitle]{biblatex}
+\addbibresource{references.bib}
+
+\def\mathdefault#1{#1}
+
+\title{DFT Simulation of\\Nitrogen-Vacancy centers in Diamond}
+\subtitle{Final Project for Electronic Structure Theory}
+\author{Bálint Apostagi}
+\date{SoSe 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Introduction}
+    Motivation:
+    \begin{itemize}
+        \item features localized orbitals near the vacancy
+        \item usages in magnetometry and as SPS and qubit
+    \end{itemize}
+
+    Goals:
+    \begin{itemize}
+        \item understanding supercells of diamond
+        \item reproducing the localized orbitals in $NV^-$
+        \item finding the $NV^-$ ground state density
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Methods used}
+    \only<1>{
+        \textbf{Born-Oppenheimer approximation:} Separation of ions and valence electrons
+
+        \begin{itemize}
+            \item \textbf{Electronic problem:}
+            \begin{itemize}
+                \item only valence electrons are treated
+                \item core electrons in pseudopotential of ions
+                \item finding ground state electron density $n(r)$, using DFT
+            \end{itemize}
+            \item \textbf{Ionic problem:}
+            \begin{itemize}
+                \item neglecting interactions between energy surfaces
+                \item classical nuclei approximation, nuclei in potential of $n(r)$
+                \item geometry optimization using BFGS
+            \end{itemize}
+            \item iterating until ionic forces vanish
+        \end{itemize}
+    }
+    \only<2> {
+        \textbf{DFT} in more detail
+        \begin{itemize}
+            \item solving non-interacting KS system with same density
+            \item $KS$ equation is $n$ dependent, needs self consistency cycle
+            \item $E_\mathrm{XC}[n]$ collects differences between KS and real system
+            \item using PBE exchange correlation functional
+            \item truncated plane wave basis
+            \item finite k-grid for integration over BZ
+            \item periodic boundary conditions: large supercell isolates defects
+            \item $G_0 W_0$ approximation used for band structure corrections
+            \begin{itemize}
+                \item linear response of KS system is calculated
+                \item singe electron energy correction based on linear response
+            \end{itemize}
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}{Diamond}
+    \begin{itemize}
+        \item basic parameters converged in primitive cell to $0.1$ meV
+        \item assumption: parameters also reasonable for supercell+defect
+        \item calculation of the cohesive energy
+        \item GW correction on the diamond band structure
+        \begin{itemize}
+            \item parameters converged to $10$ meV
+            \item assumption: correction is smooth for diamond (wrt $\vec{k}$)
+            \item correction only on k-grid, interpolated inbetween
+        \end{itemize}
+        \item band folding observed on cubic cell
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Convergences of parameters}
+    
+    \only<1-2>{
+        \framesubtitle{Basic parameters}
+    }
+
+    \only<1> {
+        Cutoff energy for the plane wave basis: ecut = 46 Ha
+
+        \resizebox{\linewidth}{!}{
+            \input{figures/ecut.pgf}
+        }
+    }
+
+    \only<2> {
+        k-grid resolution along reciprocal lattice vectors: ngkpt = 10
+
+        \resizebox{\linewidth}{!}{
+            \input{figures/ngkpt.pgf}
+        }
+    }
+
+    \only<3-6> {
+        \framesubtitle{GW parameters}
+    }
+
+    \only<3> {
+        Cutoff energy for the representation of $\epsilon^{-1}$: ecuteps = 12 Ha
+
+        \resizebox{\linewidth}{!}{
+            \input{figures/screcut.pgf}
+        }
+    }
+
+    \only<4> {
+        Number of bands used to calculate $\epsilon^{-1}$: nband = 30
+
+        \resizebox{\linewidth}{!}{
+            \input{figures/scrnbands.pgf}
+        }
+    }
+
+    \only<5> {
+        Cutoff energy for the self energy integral: ecutsigx = 12 Ha
+
+        \resizebox{\linewidth}{!}{
+            \input{figures/gwecut.pgf}
+        }
+    }
+
+    \only<6> {
+        Number of bands used in the self energy calculation: nband = 10
+        \resizebox{\linewidth}{!}{
+            \input{figures/gwnbands.pgf}
+        }
+    }
+
+    \only<7> {
+        \framesubtitle{Summary}
+        \begin{center}
+            \begin{tabular}{r l}
+                \multicolumn{2}{l}{\textbf{Basic parameters}}
+                \\\hline
+                ecut & 46 eV \\
+                ngkpt & 10
+                \\\hline
+                \multicolumn{2}{l}{\textbf{Screening}}
+                \\\hline
+                ecuteps & 12 eV \\
+                nband & 30
+                \\\hline
+                \multicolumn{2}{l}{\textbf{Screening}}
+                \\\hline
+                ecutsigx & 12 eV \\
+                nband & 30
+                \\\hline
+            \end{tabular}
+            \hspace*{0.1cm}
+            \begin{tabular}{r l l l}
+                \multicolumn{4}{l}{\textbf{Geometry optimization}}
+                \\\hline
+                cell size\footnote{
+                    good agreement (0.2\%) with \cite{diabands}
+                } & \multicolumn{3}{l}{6.7513 Bohr} 
+                \\\hline
+                \multicolumn{4}{l}{relative atomic coordinates} \\
+                & 0 & 0 & 0 \\
+                & 0.25 & 0.25 & 0.25
+                \\\hline
+                \multicolumn{4}{l}{relative lattice vectors} \\
+                & 0.5 & 0.5 & 0 \\
+                & 0 & 0.5 & 0.5 \\
+                & 0.5 & 0 & 0.5 
+                \\\hline
+            \end{tabular}
+        \end{center}
+        Converged ground state energy: $E_0 = 327.56$ eV
+    }
+\end{frame}
+
+\begin{frame}{Diamond BZ}
+    The Brillouin zone of diamond; reciprocal lattice vectors (green); high symmetry path (red and blue);
+    k-grid reduced by symmetries (orange)
+
+    \begin{center}
+        \resizebox{0.5\linewidth}{!}{
+            \input{figures/dbz.pgf}
+        }
+    \end{center}    
+\end{frame}
+
+\begin{frame}{Cohesive energy of diamond}
+    Cell size convergence $\rightarrow$ $E_\mathrm{single} = 156.01$ eV:
+    \resizebox{\linewidth}{!}{
+        \input{figures/atomization.pgf}
+    }
+    Cohesive energy $E_0/2 - E_\mathrm{single} = 7.77$ eV/atom;\\
+    comparable to previous PBE calculations, within 5\% of experiment\footcite{diacohesive}
+\end{frame}
+
+\begin{frame}{Diamond band structure}
+    \only<1-2>{\framesubtitle{Primitive cell}}
+
+    \only<1> {
+        Band structure of the KS system (left) and with GW correction (right).
+        \resizebox{\linewidth}{!}{
+            \input{figures/dbands-separate.pgf}
+        }
+        Features similar to previousy published calculations\footcite{diabands}:
+        \begin{itemize}
+            \item KS band gap (4.17 eV) within 25\%,
+            \item GW band gap (5.41 eV) within 2\%
+        \end{itemize}
+    }
+
+    \only<2> {
+        The KS band structure overlayed with the GW band structure. The GW correction fairly constant for the valence band.
+        \begin{center}
+            \resizebox{0.7\linewidth}{!}{
+                \input{figures/dbands-combined.pgf}
+            }
+        \end{center}
+    }
+
+    \only<3> {
+        \framesubtitle{Cubic cell}
+
+        Valence band of the cubic cell, compared of the primitive cell. The same bands appear; alltogether 4 times as many bands
+        \begin{center}
+            \resizebox{0.7\linewidth}{!}{
+                \input{figures/d1bands.pgf}
+            }
+        \end{center}
+    }
+\end{frame}
+
+\begin{frame}{Nitrogen-Vacancy center}
+    Ground state and band structure calculations for $NV^-$ in
+    \begin{itemize}
+        \item $1\times 1\times 1$ cubic supercell (7 atoms)
+        \item $2\times 2\times 2$ cubic supercell (63 atoms)
+    \end{itemize}
+    Converged parameters taken from diamond \\
+    Expectation: spin polarized $^3A_2$ ground state
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\linewidth]{figures/example-nvc-bands.png}
+
+        \caption{
+            \footnotesize
+            from \cite{nvcgs}
+        }
+    \end{figure}
+\end{frame}
+
+\begin{frame}{$NV^-$ in $1\times 1\times 1$ supercell}
+    \begin{center}
+        \resizebox{0.7\linewidth}{!}{
+            \input{figures/nvc1bands.pgf}
+        }
+    \end{center}
+    \vspace*{-0.5cm}
+    \begin{itemize}
+        \item Some orbitals appear in the diamond band gap
+        \item No localized states visible
+        \item No clear distinction between valence and conduction bands
+        \item Supercell too small, substantial defect interaction
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{$NV^-$ in $2\times 2\times 2$ supercell}
+    \only<1> {
+        \frametitle{Band structure}
+        PLACEHOLDER
+        \begin{center}
+            \resizebox{0.7\linewidth}{!}{
+                \input{figures/nvc2bands.pgf}
+            }
+        \end{center}
+    }
+
+    \only<2> {
+        \frametitle{Ground state density}
+        PLACEHOLDER
+        \begin{figure}
+            \includegraphics[width=0.5\linewidth]{figures/nvc2orbitals_DEN_125.png}
+        \end{figure}
+    }
+\end{frame}
+
+\end{document}

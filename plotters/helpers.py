@@ -1,6 +1,7 @@
 import os
 from functools import wraps
 import matplotlib.pyplot as plt
+from matplotlib import use as use_mpl_backend
 
 _CALC_DIR = os.environ['ESTNVCD_CALC_DIR']
 _FIG_DIR = os.environ['ESTNVCD_FIG_DIR']
@@ -16,6 +17,16 @@ _CALC_PREFIX = []
 _PLOTS = dict()
 
 _EXT_PREF = '.svg'
+_EXT_SUPPORTED = [
+    'pdf', 'svg', 'pgf', 'eps', 'png', 'jpg'
+]
+
+
+def set_export_format_preference(ext):
+    global _EXT_PREF
+    if ext not in _EXT_SUPPORTED:
+        raise ValueError(f'Export format {ext} not supported. Supported formats are: {",".join([exti for exti in _EXT_SUPPORTED])}')
+    _EXT_PREF = f'.{ext}'
 
 
 def calcdir(address):
@@ -88,6 +99,9 @@ def mplfig(fig=None, name='', outdir='./', tight_layout=True, *args, **kwargs):
 
 
 def runplot(name, save=False):
+    if _EXT_PREF == '.pgf' and save:
+        use_mpl_backend('pgf')
+        
     altname = f'plot_{name}'
     if name in _PLOTS:
         _PLOTS[name](save)

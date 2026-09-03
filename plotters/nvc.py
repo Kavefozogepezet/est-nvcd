@@ -9,20 +9,34 @@ from itertools import product
 from helpers import *
 
 
-with calcenter('nvc1'):
-    @plotfunc('_GSR.nc@bands')
-    def nvc1bands(outdir, gsrfile):
-        ebplt = ElectronBandsPlotter()
-        with abiopen(gsrfile) as gsr:
-            ebplt.add_ebands('$NVC^- in 1\\times1\\times1$', gsr.ebands)
+@plotfunc('_GSR.nc@nvc1/bands', '_GSR.nc@diamond/bands')
+@mplfig(figsize=(5,4))
+def nvc1bands(fig, gsrfile, primgsrfile):
+    ax = fig.add_subplot(111)
+    with (
+        abiopen(gsrfile) as gsr,
+        abiopen(primgsrfile) as primgsr
+    ):
+        ebands = primgsr.ebands
+        efermi = gsr.ebands.fermie 
+        vb_max = ebands.get_edge_state('vbm').eig - efermi
+        vb_min = ebands.eigens.min() - efermi
+        cb_min = ebands.get_edge_state('cbm').eig - efermi
+        cb_max = 10
 
-        fig = ebplt.plot(show=False)
-        fig.set_size_inches(5,4)
-        mplfig(
-            fig=fig,
-            name='nvc1bands',
-            outdir=outdir
-        )
+        axspancommon = {
+            'hatch': '/////',
+            'hatchcolor': 'skyblue',
+            'fill': False,
+            'edgecolor': 'skyblue',
+        }
+        ax.axhspan(vb_min, vb_max, **axspancommon, label='diamond bands')
+        ax.axhspan(cb_min, cb_max, **axspancommon)
+
+        gsr.ebands.plot(ax=ax, lw=1, label='$NV^-$, $1\\times1\\times1$',show=False)
+
+        ax.legend(loc='upper right', framealpha=1)
+        ax.set_ylim(-10,10)
 
 
 class OrbitalPlotter:
@@ -216,11 +230,11 @@ with calcenter('nvc2'):
         for (_, _, files) in os.walk(abidir):
             for file in files:
                 if file.startswith('DEN_') and file.endswith('.xsf'):
-                    plotter = pv.Plotter(window_size=(500,500))
+                    plotter = pv.Plotter(window_size=(500,500), off_screen=bool(outdir))
                     oplt = OrbitalPlotter(abidir + file, conf)
                     oplt.plot(plotter)
                     if not outdir:
                         plotter.show()
                     else:
                         name = file.split('.')[0]
-                        plotter.save_graphic(outdir + f'nvc2orbitals_{name}.svg')
+                        plotter.screenshot(outdir + f'nvc2orbitals_{name}.png')

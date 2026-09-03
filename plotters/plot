@@ -10,9 +10,12 @@ if __name__ == '__main__':
     argp = ArgumentParser('plot')
 
     argp.add_argument('-s', action='store_true', default=False)
+    argp.add_argument('-f', default='pgf')
     argp.add_argument('plots', nargs='*')
 
     args = argp.parse_args()
+
+    helpers.set_export_format_preference(args.f)
 
     if len(args.plots) == 0:
         helpers.runplots(args.s)
