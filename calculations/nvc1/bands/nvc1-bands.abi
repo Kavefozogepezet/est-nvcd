@@ -30,7 +30,7 @@ xcart
 #bands
 iscf    -2
 nband   32
-tolwfr  1.0d-12
+tolwfr  1.0d-10
 enunit  1
 #ndivsm  10
 kptopt  -11

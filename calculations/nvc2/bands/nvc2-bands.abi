@@ -81,9 +81,13 @@ xcart
     10.12690274835 6.7512684989 10.12690274835
     11.81471987305 8.4390856236 11.81471987305
 
+# spin polarization
+nsppol 2
+spinmagntarget 2
+
 # bands
 iscf    -2
-nband   140
+nband   140 140
 tolwfr  1.0d-12
 enunit  1
 ndivsm 10

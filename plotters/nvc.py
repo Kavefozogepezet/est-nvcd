@@ -198,19 +198,26 @@ with calcenter('nvc2'):
     @mplfig(figsize=(5,4))
     def nvc2bands(fig, gsrfile):
         ax = fig.add_subplot(111)
-        common = {'show': False, 'ax': ax, 'lw': 1.5}
+        common = {'show': False, 'ax': ax, 'lw': 1}
+
         with abiopen(gsrfile) as gsr:
             ebands = gsr.ebands
-            ebands.plot(band_range=(100,125), color='blue', **common)
-            ebands.plot(band_range=(128,140), color='blue', label='diamond orbitals', **common)
-            ebands.plot(band_range=(125,128), color='red', label='localized orbitals', with_band_index=True, **common)
+            ebands.plot(band_range=(126,128), spin=1, color='blue', ls='--', label='$e_{x,y\\downarrow}$', **common)
+            ebands.plot(band_range=(126,128), spin=0, color='red', ls='--', label='$e_{x,y\\uparrow}$', **common)
+
+            ebands.plot(band_range=(125,126), spin=1, color='blue', label='$a_{1\\downarrow}$', **common)
+            ebands.plot(band_range=(125,126), spin=0, color='red', label='$a_{1\\uparrow}$', **common)
+
+            ebands.plot(band_range=(100,125), color='black', **common)
+            ebands.plot(band_range=(128,140), spin=0, color='black', **common)
+            ebands.plot(band_range=(128,140), spin=1, color='black', label='diamond', **common)
 
         ax.set_ylim(-6,4)
-        ax.legend()
+        ax.legend(loc='lower right', framealpha=1, ncols=3)
 
 
-    @plotfunc('@scf-gs')
-    def nvc2orbitals(outdir, abidir):
+    @plotfunc('DEN.xsf@scf-gs')
+    def nvc2den(outdir, denxsf):
         conf = OrbitalPlotter.Config()
         #conf.camera_pos = [
         #    (4.3295388388053775, 22.164167703283645, 7.0675032471873624),
@@ -227,14 +234,10 @@ with calcenter('nvc2'):
         conf.isosurface_opacity = 1
         conf.fading = (0.2,2)
 
-        for (_, _, files) in os.walk(abidir):
-            for file in files:
-                if file.startswith('DEN_') and file.endswith('.xsf'):
-                    plotter = pv.Plotter(window_size=(500,500), off_screen=bool(outdir))
-                    oplt = OrbitalPlotter(abidir + file, conf)
-                    oplt.plot(plotter)
-                    if not outdir:
-                        plotter.show()
-                    else:
-                        name = file.split('.')[0]
-                        plotter.screenshot(outdir + f'nvc2orbitals_{name}.png')
+        conf.isosurfaces = [30]
+        plotter = pv.Plotter(window_size=(500,500))
+        oplt = OrbitalPlotter(denxsf, conf)
+        oplt.plot(plotter)
+
+        if not outdir: plotter.show()
+        else: plotter.save_graphic(outdir + f'nvc2den.svg')
